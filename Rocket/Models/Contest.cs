@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Rocket.Models
 {
@@ -14,7 +12,5 @@ namespace Rocket.Models
         public DateTimeOffset EndDate { get; set; }
         public bool IsOpen { get; set; }
         public double TotalBetAmount { get; set; }
-
-        public ICollection<Bet> Bets { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using Rocket.Repositories;
 namespace Rocket.Migrations
 {
     [DbContext(typeof(RocketDbContext))]
-    [Migration("20210428220454_InitialModels")]
+    [Migration("20210429004635_InitialModels")]
     partial class InitialModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,30 +27,20 @@ namespace Rocket.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("REAL");
 
-                    b.Property<int?>("ContestForeignKey")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ContestId1")
+                    b.Property<int>("ContestId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserForeignKey")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("UserId1")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContestForeignKey");
+                    b.HasIndex("ContestId");
 
-                    b.HasIndex("ContestId1");
-
-                    b.HasIndex("UserForeignKey");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bets");
                 });
@@ -96,17 +86,12 @@ namespace Rocket.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserForeignKey")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("UserId1")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserForeignKey");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Transactions");
                 });
@@ -129,19 +114,15 @@ namespace Rocket.Migrations
                 {
                     b.HasOne("Rocket.Models.Contest", "Contest")
                         .WithMany()
-                        .HasForeignKey("ContestForeignKey");
-
-                    b.HasOne("Rocket.Models.Contest", null)
-                        .WithMany("Bets")
-                        .HasForeignKey("ContestId1");
+                        .HasForeignKey("ContestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Rocket.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserForeignKey");
-
-                    b.HasOne("Rocket.Models.User", null)
-                        .WithMany("Bets")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Contest");
 
@@ -152,25 +133,11 @@ namespace Rocket.Migrations
                 {
                     b.HasOne("Rocket.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserForeignKey");
-
-                    b.HasOne("Rocket.Models.User", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Rocket.Models.Contest", b =>
-                {
-                    b.Navigation("Bets");
-                });
-
-            modelBuilder.Entity("Rocket.Models.User", b =>
-                {
-                    b.Navigation("Bets");
-
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

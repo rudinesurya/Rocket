@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Rocket.Models
 {
@@ -11,9 +10,9 @@ namespace Rocket.Models
         public double Amount { get; set; }
         public DateTimeOffset Timestamp { get; set; }
 
-        [ForeignKey("UserForeignKey")]
+        public int UserId { get; set; }
         public User User { get; set; }
-        [ForeignKey("ContestForeignKey")]
+        public int ContestId { get; set; }
         public Contest Contest { get; set; }
     }
 }

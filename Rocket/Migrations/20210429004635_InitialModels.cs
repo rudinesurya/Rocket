@@ -45,38 +45,24 @@ namespace Rocket.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Amount = table.Column<double>(type: "REAL", nullable: false),
                     Timestamp = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    UserForeignKey = table.Column<int>(type: "INTEGER", nullable: true),
-                    ContestForeignKey = table.Column<int>(type: "INTEGER", nullable: true),
-                    ContestId1 = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ContestId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bets_Contests_ContestForeignKey",
-                        column: x => x.ContestForeignKey,
+                        name: "FK_Bets_Contests_ContestId",
+                        column: x => x.ContestId,
                         principalTable: "Contests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Bets_Contests_ContestId1",
-                        column: x => x.ContestId1,
-                        principalTable: "Contests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Bets_Users_UserForeignKey",
-                        column: x => x.UserForeignKey,
+                        name: "FK_Bets_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Bets_Users_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,55 +74,33 @@ namespace Rocket.Migrations
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
                     Amount = table.Column<double>(type: "REAL", nullable: false),
                     Comment = table.Column<string>(type: "TEXT", nullable: true),
-                    UserForeignKey = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Users_UserForeignKey",
-                        column: x => x.UserForeignKey,
+                        name: "FK_Transactions_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Users_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bets_ContestForeignKey",
+                name: "IX_Bets_ContestId",
                 table: "Bets",
-                column: "ContestForeignKey");
+                column: "ContestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bets_ContestId1",
+                name: "IX_Bets_UserId",
                 table: "Bets",
-                column: "ContestId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bets_UserForeignKey",
-                table: "Bets",
-                column: "UserForeignKey");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bets_UserId1",
-                table: "Bets",
-                column: "UserId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_UserForeignKey",
+                name: "IX_Transactions_UserId",
                 table: "Transactions",
-                column: "UserForeignKey");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_UserId1",
-                table: "Transactions",
-                column: "UserId1");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

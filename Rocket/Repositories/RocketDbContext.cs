@@ -20,17 +20,7 @@ namespace Rocket.Repositories
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<User>()
-                .HasMany(x => x.Bets)
-                .WithOne();
-            builder.Entity<User>()
-                .HasMany(x => x.Transactions)
-                .WithOne();
-
-            builder.Entity<Contest>()
-                .HasMany(x => x.Bets)
-                .WithOne();
-
+            
         }
     }
 }

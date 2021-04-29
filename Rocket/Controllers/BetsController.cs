@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Rocket.Controllers.ViewModels;
 using Rocket.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Rocket.Controllers
 {
@@ -22,7 +23,7 @@ namespace Rocket.Controllers
         [HttpGet]
         public IEnumerable<Models.Bet> Get()
         {
-            return rocketDbContext.Bets.ToList();
+            return rocketDbContext.Bets.Include(x=>x.User).Include(x=>x.Contest).ToList();
         }
 
         [HttpPost]
