@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rocket.Repositories;
 
 namespace Rocket.Migrations
 {
     [DbContext(typeof(RocketDbContext))]
-    partial class RocketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210430213508_ModelRefactor")]
+    partial class ModelRefactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,6 +7,7 @@ namespace Rocket.Models
     {
         [Key]
         public int Id { get; set; }
+        public int Outcome { get; set; }
         public double Amount { get; set; }
         public DateTimeOffset Timestamp { get; set; }
 

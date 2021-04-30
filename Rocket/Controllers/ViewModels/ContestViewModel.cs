@@ -8,4 +8,9 @@ namespace Rocket.Controllers.ViewModels
         public int Id { get; set; }
         public string Description { get; set; }
     }
+
+    public class ContestOutcomeViewModel
+    {
+        public int Outcome { get; set; }
+    }
 }

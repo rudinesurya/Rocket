@@ -10,6 +10,7 @@ namespace Rocket.Models
         public string Description { get; set; }
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }
+        public int Outcome { get; set; }
         public bool IsOpen { get; set; }
         public double TotalBetAmount { get; set; }
     }

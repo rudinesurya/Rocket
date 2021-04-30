@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Rocket.Controllers.ViewModels;
+using Rocket.Models;
 using Rocket.Repositories;
 
 namespace Rocket.Controllers
@@ -21,21 +22,21 @@ namespace Rocket.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Models.User> Get()
+        public IEnumerable<User> Get()
         {
             return rocketDbContext.Users.ToList();
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Models.User> Get(int id)
+        public ActionResult<User> Get(int id)
         {
             return rocketDbContext.Users.Find(id);
         }
 
         [HttpPost]
-        public ActionResult<Models.User> Post([FromBody] UserViewModel user)
+        public ActionResult<User> Post([FromBody] UserViewModel user)
         {
-            var newUser = new Models.User { Id=user.Id, Name = user.Name };
+            var newUser = new User { Id=user.Id, Name = user.Name };
             rocketDbContext.Users.Add(newUser);
             rocketDbContext.SaveChanges();
             

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rocket.Controllers.ViewModels;
 using Rocket.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Rocket.Models;
 
 namespace Rocket.Controllers
 {
@@ -21,25 +22,45 @@ namespace Rocket.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Models.Bet> Get()
+        public IEnumerable<Bet> Get()
         {
             return rocketDbContext.Bets.Include(x=>x.User).Include(x=>x.Contest).ToList();
         }
 
         [HttpPost]
-        public ActionResult<Models.Bet> Post([FromBody] BetViewModel bet)
+        public ActionResult<Bet> Post([FromBody] BetViewModel bet)
         {
             var user = rocketDbContext.Users.Find(bet.UserId);
             var contest = rocketDbContext.Contests.Find(bet.ContestId);
-            var newBet = new Models.Bet {
+
+            if (user == null || contest == null)
+                throw new KeyNotFoundException();
+            if (contest.IsOpen == false)
+                throw new Exception("Contest is not open !");
+
+            var duplicateExists = rocketDbContext.Bets.Where(x => x.UserId == bet.UserId && x.ContestId == bet.ContestId).SingleOrDefault();
+            if (duplicateExists != null)
+                throw new Exception("Duplicate found !");
+            
+            var newBet = new Bet
+            {
                 Id = bet.Id,
                 User = user,
                 Contest = contest,
                 Amount = bet.Amount,
+                Outcome = bet.Outcome,
                 Timestamp = DateTimeOffset.Now
             };
 
             rocketDbContext.Bets.Add(newBet);
+            var newTransaction = new Transaction
+            {
+                Type = 1,
+                Amount = bet.Amount,
+                Comment = $"Placed a bet of {bet.Amount}",
+                UserId = user.Id
+            };
+            rocketDbContext.Transactions.Add(newTransaction);
             rocketDbContext.SaveChanges();
 
             return CreatedAtAction(nameof(Post), new { id = newBet.Id }, newBet);
@@ -51,6 +72,17 @@ namespace Rocket.Controllers
             var toDelete = rocketDbContext.Bets.Find(id);
             if (toDelete == null)
                 return NotFound();
+            if (toDelete.Contest.IsOpen == false)
+                throw new AccessViolationException();
+
+            var newTransaction = new Transaction
+            {
+                Type = 2,
+                Amount = toDelete.Amount,
+                Comment = $"Removed a bet of {toDelete.Amount}",
+                UserId = toDelete.UserId
+            };
+            rocketDbContext.Transactions.Add(newTransaction);
 
             rocketDbContext.Bets.Remove(toDelete);
             rocketDbContext.SaveChanges();
